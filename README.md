@@ -1,80 +1,184 @@
-# Blue-Green Deployment Using Docker and Kubernetes
+# 🔵🟢 Blue-Green Deployment Using Docker and Kubernetes
 
-## Project Overview
+## 📌 Project Overview
 
-This project demonstrates a Blue-Green Deployment strategy using Docker and Kubernetes to deploy and manage two different versions of a website.
+This project demonstrates the implementation of a **Blue-Green Deployment Strategy using Docker and Kubernetes**. It was developed as part of my **College Final-Year Project** to gain practical experience in containerization, application deployment, Kubernetes orchestration, and deployment strategies.
 
-The main objective is to reduce deployment risks by maintaining two separate application environments: Blue (Version 1.0) and Green (Version 2.0). Both versions run simultaneously, while Kubernetes Service controls which version receives application traffic.
+Blue-Green Deployment is a deployment technique in which two separate application environments are maintained:
 
-This approach allows a new version to be deployed and tested before switching production traffic. If an issue occurs, traffic can be switched back to the previous version.
+- 🔵 **Blue Environment – Version 1.0:** Represents the existing production version of the application.
+- 🟢 **Green Environment – Version 2.0:** Represents the updated version of the application.
 
-## Project Objectives
+Both versions are deployed independently using Docker containers and Kubernetes Deployments. A Kubernetes Service is used to control which environment receives application traffic by changing its selector.
 
-- Implement a Blue-Green Deployment strategy.
-- Build separate Docker images for Blue and Green versions.
-- Deploy both versions using Kubernetes Deployments.
-- Manage application Pods using Kubernetes.
-- Configure a Kubernetes NodePort Service.
-- Switch traffic between Blue and Green using labels and selectors.
-- Perform rollback by switching traffic to the previous version.
+This approach helps demonstrate application updates, traffic switching, and rollback to a previous version with minimal downtime.
 
-## Technologies Used
+## 🎯 Project Objectives
+
+- Understand and implement the Blue-Green Deployment strategy.
+- Build and containerize website applications using Docker.
+- Deploy multiple application versions using Kubernetes.
+- Configure Kubernetes Deployments and Services.
+- Switch application traffic between Blue and Green environments.
+- Demonstrate rollback to the previous application version.
+- Gain hands-on experience with container orchestration.
+
+## 🛠️ Technologies Used
 
 | Technology | Purpose |
 |---|---|
-| HTML & CSS | Website development |
-| Docker | Containerization |
-| Nginx | Web server |
-| Kubernetes | Container orchestration |
-| Minikube | Local Kubernetes cluster |
-| PowerShell | Command-line operations |
+| HTML | Creating the application webpages |
+| Docker | Building and containerizing application images |
+| Kubernetes | Managing application deployments and Pods |
+| Minikube | Running a local Kubernetes cluster |
+| YAML | Defining Kubernetes resources |
+| Docker Desktop | Providing the local container environment |
+| Windows PowerShell | Executing Docker and Kubernetes commands |
 
-## Project Architecture
+## 🏗️ Project Architecture
+
+The project consists of two independent application environments connected through a Kubernetes Service.
 
 ```text
-                Website Source Code
+                   User / Browser
                          |
-               +---------+---------+
-               |                   |
-          Blue Version         Green Version
-            v1.0                  v2.0
-               |                   |
-          Docker Build        Docker Build
-               |                   |
-       blue-green-site       green-green-site
-           :1.0                  :2.0
-               |                   |
-       Blue Deployment      Green Deployment
-          2 Replicas            2 Replicas
-               |                   |
-               +---------+---------+
                          |
-                 Kubernetes Service
-                   NodePort 30085
+                Kubernetes Service
+                  NodePort: 30085
                          |
-                Traffic Management
+                  Service Selector
                          |
-              Blue / Green Switching
+              +----------+----------+
+              |                     |
+         Blue Environment      Green Environment
+           Version 1.0           Version 2.0
+              |                     |
+       Blue Deployment       Green Deployment
+              |                     |
+         2 Kubernetes           2 Kubernetes
+             Pods                  Pods
+              |                     |
+        Blue Website           Green Website
 ```
 
-**Project Architecture Screenshot**
+**Traffic Switching:**
 
-<!-- Add your architecture screenshot below -->
+- Initially, the Service selector points to the Blue environment.
+- When the selector is changed to Green, traffic is routed to the Green Pods.
+- When the selector is changed back to Blue, traffic returns to the Blue Pods.
 
-![Project Architecture](images/project-architecture.png)
+## 🔄 Project Implementation Workflow
 
-## Project Folder Structure
+### 1. Website Development
+
+Created two simple website versions:
+
+- Blue website displaying **BLUE DEPLOYMENT – Production Environment – Version 1.0**.
+- Green website displaying **GREEN DEPLOYMENT – New Production Environment – Version 2.0**.
+
+Different background colours and headings were used to identify each environment easily.
+
+### 2. Docker Image Creation
+
+Created separate Dockerfiles for the Blue and Green applications and built individual Docker images.
+
+Docker images used:
+
+- `blue-green-site:1.0`
+- `green-green-site:2.0`
+
+This allowed both website versions to run independently in containers.
+
+### 3. Kubernetes Deployments
+
+Created separate Kubernetes Deployment YAML files for both application versions.
+
+- **blue-deployment.yaml:** Deploys the Blue application with 2 replicas.
+- **green-deployment.yaml:** Deploys the Green application with 2 replicas.
+
+Each Deployment uses labels to identify its application version:
+
+- Blue: `version: blue`
+- Green: `version: green`
+
+Both environments can run simultaneously in the Kubernetes cluster.
+
+### 4. Kubernetes Service Configuration
+
+Created a Kubernetes Service named `blue-green-service`.
+
+Service configuration:
+
+- **Service Type:** NodePort
+- **Service Port:** 80
+- **Target Port:** 80
+- **NodePort:** 30085
+- **Application Label:** `app: blue-green-site`
+
+The Service provides a consistent access point for the application. Its selector determines which version of the application receives traffic.
+
+### 5. Blue Environment Deployment
+
+Initially configured the Kubernetes Service selector to:
+
+`version: blue`
+
+The Service routes traffic to the Blue Deployment Pods, displaying the existing production website (Version 1.0).
+
+### 6. Green Environment Deployment
+
+Changed the Kubernetes Service selector to:
+
+`version: green`
+
+The Service then routes traffic to the Green Deployment Pods, displaying the updated website (Version 2.0).
+
+### 7. Rollback to Blue
+
+Changed the Service selector back to:
+
+`version: blue`
+
+This demonstrates how traffic can be switched back to the previous application version without deleting the Green Deployment.
+
+## 📸 Project Screenshots
+
+### 🔵 1. Blue Deployment – Version 1.0
+
+Shows the Blue application running in the browser. This represents the existing production environment and displays Version 1.0.
+
+![Blue Deployment - Version 1.0](images/blue-deployment.png)
+
+### 🟢 2. Green Deployment – Version 2.0
+
+Shows the updated Green application running in the browser. This represents the new production environment and displays Version 2.0.
+
+![Green Deployment - Version 2.0](images/green-deployment.png)
+
+### ⚙️ 3. Kubernetes Service – Blue Environment
+
+Shows the Kubernetes Service configuration with the selector `app=blue-green-site,version=blue`. The Service is configured to route traffic to the Blue Deployment Pods.
+
+![Kubernetes Service - Blue](images/service-blue.png)
+
+### 🔄 4. Kubernetes Service – Green Environment
+
+Shows the Kubernetes Service configuration with the selector `app=blue-green-site,version=green`. This demonstrates changing the Service selector to route traffic to the Green environment.
+
+![Kubernetes Service - Green](images/service-green.png)
+
+## 📂 Project Folder Structure
 
 ```text
-blue-green-deployment/
+blue-green/
 │
 ├── blue/
-│   ├── index.html
-│   └── Dockerfile
+│   ├── dockerfile
+│   └── index.html
 │
 ├── green/
-│   ├── index.html
-│   └── Dockerfile
+│   ├── dockerfile
+│   └── index.html
 │
 ├── k8s/
 │   ├── blue-deployment.yaml
@@ -82,288 +186,106 @@ blue-green-deployment/
 │   └── service.yaml
 │
 ├── images/
-│   └── (Project screenshots)
+│   ├── blue-deployment.png
+│   ├── green-deployment.png
+│   ├── service-blue.png
+│   └── service-green.png
 │
 └── README.md
 ```
 
-**Project Folder Structure Screenshot**
+## 💻 Important Kubernetes Commands
 
-<!-- Add your VS Code folder structure screenshot below -->
-
-![Project Folder Structure](images/folder-structure.png)
-
-## Implementation Process
-
-### 1. Create Two Website Versions
-
-Created two independent website versions:
-
-- **Blue Version 1.0:** Existing production website.
-- **Green Version 2.0:** Updated website prepared for deployment.
-
-Each version has its own HTML file and Dockerfile.
-
-**Screenshots – Blue and Green Websites**
-
-<!-- Add Blue website screenshot -->
-
-![Blue Version 1.0](images/blue-website.png)
-
-<!-- Add Green website screenshot -->
-
-![Green Version 2.0](images/green-website.png)
-
-### 2. Create Docker Images
-
-Used Nginx Alpine as the base image to serve the website.
-
-Dockerfile:
-
-```dockerfile
-FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/index.html
-EXPOSE 80
-```
-
-Built separate images:
+**Apply Kubernetes Deployments:**
 
 ```powershell
-docker build -t blue-green-site:1.0 .
+kubectl apply -f .\k8s\blue-deployment.yaml
+kubectl apply -f .\k8s\green-deployment.yaml
 ```
+
+**Create the Kubernetes Service:**
 
 ```powershell
-docker build -t green-green-site:2.0 .
+kubectl apply -f .\k8s\service.yaml
 ```
 
-**Docker Image Build Screenshot**
-
-<!-- Add Docker build output screenshot -->
-
-![Docker Build](images/docker-build.png)
-
-**Docker Images Screenshot**
-
-<!-- Add docker images command output screenshot -->
-
-![Docker Images](images/docker-images.png)
-
-### 3. Load Images into Minikube
-
-Made the locally built Docker images available to the Minikube Kubernetes cluster.
-
-```powershell
-minikube image load blue-green-site:1.0
-minikube image load green-green-site:2.0
-```
-
-**Minikube Image Loading Screenshot**
-
-<!-- Add image loading output screenshot -->
-
-![Minikube Image Loading](images/minikube-image-load.png)
-
-### 4. Deploy Blue Version
-
-Created a Kubernetes Deployment named `blue-deployment`.
-
-Configuration:
-
-- Replicas: 2
-- Image: `blue-green-site:1.0`
-- Label: `version: blue`
-- Container Port: 80
-- Readiness Probe: HTTP `/`
-
-Applied the manifest:
-
-```powershell
-kubectl apply -f k8s/blue-deployment.yaml
-```
-
-**Blue Deployment Screenshot**
-
-<!-- Add Blue Deployment YAML or kubectl output screenshot -->
-
-![Blue Deployment](images/blue-deployment.png)
-
-### 5. Deploy Green Version
-
-Created another Kubernetes Deployment named `green-deployment`.
-
-Configuration:
-
-- Replicas: 2
-- Image: `green-green-site:2.0`
-- Label: `version: green`
-- Container Port: 80
-- Readiness Probe: HTTP `/`
-
-Applied the manifest:
-
-```powershell
-kubectl apply -f k8s/green-deployment.yaml
-```
-
-Both deployments run independently in the Kubernetes cluster.
-
-**Green Deployment Screenshot**
-
-<!-- Add Green Deployment YAML or kubectl output screenshot -->
-
-![Green Deployment](images/green-deployment.png)
-
-**Kubernetes Pods Screenshot**
-
-<!-- Add kubectl get pods output screenshot showing both versions -->
-
-![Kubernetes Pods](images/kubernetes-pods.png)
-
-### 6. Configure Kubernetes Service
-
-Created a Kubernetes NodePort Service named `blue-green-service`.
-
-The Service provides a stable endpoint to access the application Pods and routes traffic based on labels and selectors.
-
-Service configuration:
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: blue-green-service
-spec:
-  type: NodePort
-  selector:
-    app: blue-green-site
-    version: blue
-  ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 30085
-```
-
-Applied the Service:
-
-```powershell
-kubectl apply -f k8s/service.yaml
-```
-
-**Kubernetes Service Screenshot**
-
-<!-- Add service.yaml or kubectl get svc screenshot -->
-
-![Kubernetes Service](images/kubernetes-service.png)
-
-### 7. Blue-to-Green Traffic Switching
-
-Initially, the Kubernetes Service selector points to:
-
-```yaml
-version: blue
-```
-
-After deploying and validating Green Version 2.0, updated the Service selector to:
-
-```yaml
-version: green
-```
-
-This switches Service traffic from the Blue Pods to the Green Pods without changing the Deployments.
-
-**Blue-to-Green Switching Screenshot**
-
-<!-- Add screenshot showing Green selector and Green website in browser -->
-
-![Blue to Green Switching](images/blue-to-green.png)
-
-### 8. Rollback: Green-to-Blue
-
-If the Green version encounters an issue, the previous production version can be restored by changing the Service selector back:
-
-```yaml
-version: blue
-```
-
-This redirects traffic to the Blue Pods.
-
-**Green-to-Blue Rollback Screenshot**
-
-<!-- Add screenshot showing Blue selector and Blue website in browser -->
-
-![Green to Blue Rollback](images/green-to-blue-rollback.png)
-
-## Why Kubernetes Service Is Important
-
-The Kubernetes Service is an important component of this project because:
-
-- It provides a stable network endpoint for application Pods.
-- It routes traffic using labels and selectors.
-- It avoids accessing individual Pod IP addresses directly.
-- It allows switching between Blue and Green versions.
-- It makes rollback easier by changing the Service selector.
-
-## Verification Commands
-
-Check Deployments:
+**Check Deployments and Pods:**
 
 ```powershell
 kubectl get deployments
+kubectl get pods -o wide
 ```
 
-Check Pods:
-
-```powershell
-kubectl get pods --show-labels
-```
-
-Check Service:
+**Check Services:**
 
 ```powershell
 kubectl get services
+kubectl describe service blue-green-service
 ```
 
-Check Service endpoints:
+**Switch Traffic to Green:**
+
+```powershell
+kubectl patch service blue-green-service --type=merge --patch-file .\green-patch.yaml
+```
+
+**Rollback Traffic to Blue:**
+
+```powershell
+kubectl patch service blue-green-service --type=merge --patch-file .\blue-patch.yaml
+```
+
+**Verify Service Endpoints:**
 
 ```powershell
 kubectl get endpoints blue-green-service
 ```
 
-Access the website:
+**Access the Application:**
 
 ```powershell
 minikube service blue-green-service
 ```
 
-**Final Kubernetes Verification Screenshot**
+## ✨ Key Features
 
-<!-- Add screenshot showing deployments, pods, services and endpoints -->
+- Two independent application environments.
+- Separate Docker images for different application versions.
+- Multiple Kubernetes Deployments running simultaneously.
+- Kubernetes Service-based traffic switching.
+- Version-based Pod selection using labels and selectors.
+- Demonstration of rollback to the previous version.
+- Minimal-downtime deployment approach.
 
-![Kubernetes Verification](images/kubernetes-verification.png)
+## 📚 Learning Outcomes
 
-## Key Benefits
+Through this project, I gained practical knowledge of:
 
-- Reduced deployment risk.
-- Independent application versions.
-- Easy traffic switching.
-- Faster rollback to the previous version.
-- Better understanding of Docker containerization and Kubernetes orchestration.
-- Improved application deployment and management.
+- Docker image creation and containerization.
+- Kubernetes Pods, Deployments, and Services.
+- YAML configuration and resource management.
+- Kubernetes labels and selectors.
+- Application traffic routing.
+- Blue-Green Deployment and rollback strategies.
+- Managing application versions in a Kubernetes environment.
 
-## Learning Outcomes
+## 👨‍💻 Project Information
 
-Through this project, I gained hands-on experience with:
+| Category | Details |
+|---|---|
+| Project Name | Blue-Green Deployment |
+| Project Type | College Final-Year Project |
+| Deployment Strategy | Blue-Green Deployment |
+| Containerization | Docker |
+| Orchestration | Kubernetes |
+| Local Cluster | Minikube |
+| Application | HTML Website |
+| Operating Environment | Windows 11 / Docker Desktop |
 
-- Building and managing Docker images.
-- Deploying containerized applications on Kubernetes.
-- Creating and managing Kubernetes Deployments and Pods.
-- Configuring NodePort Services.
-- Understanding labels, selectors and Service endpoints.
-- Implementing Blue-Green traffic switching.
-- Performing application rollback.
+---
 
-## Conclusion
+## 🙌 Conclusion
 
-Successfully implemented a Blue-Green Deployment strategy using Docker and Kubernetes. Deployed two independent website versions and used a Kubernetes Service to manage traffic between them.
+This project provided hands-on experience in implementing a Blue-Green Deployment strategy using Docker and Kubernetes. By maintaining two independent application environments and controlling traffic through Kubernetes Service selectors, I learned how application versions can be deployed, switched, and rolled back in a controlled manner.
 
-This project demonstrates how deployment strategies can help reduce release risks and simplify application rollback in containerized environments.
+**Developed as part of my College Final-Year Project.**
