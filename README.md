@@ -147,25 +147,30 @@ This demonstrates how traffic can be switched back to the previous application v
 
 Shows the Blue application running in the browser. This represents the existing production environment and displays Version 1.0.
 
-![Blue Deployment - Version 1.0](images/blue-deployment.png)
+<img width="1767" height="842" alt="Screenshot 2026-11-08 162225" src="https://github.com/user-attachments/assets/ffa7bcaa-59e8-498b-8a9b-e1506ba6880e" />
+
 
 ### 🟢 2. Green Deployment – Version 2.0
 
 Shows the updated Green application running in the browser. This represents the new production environment and displays Version 2.0.
 
-![Green Deployment - Version 2.0](images/green-deployment.png)
+<img width="1417" height="690" alt="image" src="https://github.com/user-attachments/assets/664f8220-8fc9-4ace-89ad-150cbbf437a7" />
+
 
 ### ⚙️ 3. Kubernetes Service – Blue Environment
 
 Shows the Kubernetes Service configuration with the selector `app=blue-green-site,version=blue`. The Service is configured to route traffic to the Blue Deployment Pods.
 
-![Kubernetes Service - Blue](images/service-blue.png)
+<img width="703" height="341" alt="Screenshot 2026-11-08 162053" src="https://github.com/user-attachments/assets/c3a5bc6f-302f-4188-a343-c5c6087f03e5" />
+
 
 ### 🔄 4. Kubernetes Service – Green Environment
 
 Shows the Kubernetes Service configuration with the selector `app=blue-green-site,version=green`. This demonstrates changing the Service selector to route traffic to the Green environment.
 
-![Kubernetes Service - Green](images/service-green.png)
+<img width="682" height="366" alt="image" src="https://github.com/user-attachments/assets/4a93eb0c-bb7b-41cc-8553-90416215a17f" />
+
+
 
 ## 📂 Project Folder Structure
 
@@ -274,7 +279,7 @@ Through this project, I gained practical knowledge of:
 | Category | Details |
 |---|---|
 | Project Name | Blue-Green Deployment |
-| Project Type | College Final-Year Project |
+| Project Type | Self-Initiated Project |
 | Deployment Strategy | Blue-Green Deployment |
 | Containerization | Docker |
 | Orchestration | Kubernetes |
@@ -288,4 +293,4 @@ Through this project, I gained practical knowledge of:
 
 This project provided hands-on experience in implementing a Blue-Green Deployment strategy using Docker and Kubernetes. By maintaining two independent application environments and controlling traffic through Kubernetes Service selectors, I learned how application versions can be deployed, switched, and rolled back in a controlled manner.
 
-**Developed as part of my College Final-Year Project.**
+**Developed as part of my Self-Initiated Project.**
