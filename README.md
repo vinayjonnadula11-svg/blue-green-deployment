@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-This project demonstrates the implementation of a **Blue-Green Deployment Strategy using Docker and Kubernetes**. It was developed as part of my **College Final-Year Project** to gain practical experience in containerization, application deployment, Kubernetes orchestration, and deployment strategies.
+Blue-Green Deployment is a Kubernetes-based deployment strategy that uses two identical environments: Blue (Current Production) and Green (New Version). It enables application updates with minimal downtime by deploying and testing the new version in the Green environment before switching user traffic from Blue to Green using a Kubernetes Service. If any issues occur, traffic can be switched back to the Blue environment for quick rollback.
 
 Blue-Green Deployment is a deployment technique in which two separate application environments are maintained:
 
